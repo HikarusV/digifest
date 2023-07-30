@@ -1,1 +1,1 @@
-enum ResultState { loading, empty, hasData, noData }
+enum ResultState { loading, empty, hasData, noData, error }

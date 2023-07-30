@@ -38,6 +38,8 @@ dependencies:
   provider: ^6.0.5
   sqflite: ^2.2.8+4
   material_segmented_control: ^5.0.0
+  lazy_load_indexed_stack: ^1.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

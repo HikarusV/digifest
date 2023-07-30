@@ -3,6 +3,8 @@ import 'package:digifest/data/global.dart';
 import 'package:digifest/presentation/pages/home_pages.dart';
 import 'package:digifest/presentation/pages/initiatename_pages.dart';
 import 'package:digifest/presentation/pages/splashscreen.dart';
+import 'package:digifest/presentation/provider/data_provider.dart';
+import 'package:digifest/presentation/provider/data_provider.dart';
 import 'package:digifest/presentation/provider/splash_provider.dart';
 import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,9 @@ void main() {
       ),
       ChangeNotifierProvider<StateProvider>(
         create: (context) => StateProvider()..splashscreenController(5),
+      ),
+      ChangeNotifierProvider<DataProvider>(
+        create: (context) => DataProvider(),
       )
     ],
     child: const MyApp(),

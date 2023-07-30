@@ -28,7 +28,7 @@ class DatabaseHelper {
 
   static const String _tblExpenditure = 'expenditure';
   static const String _tblIncome = 'income';
-  static const String _tblAllowance = 'income';
+  static const String _tblAllowance = 'allowance';
 
   Future<Database> _initDb() async {
     print("Init DB");
@@ -40,16 +40,23 @@ class DatabaseHelper {
   }
 
   void _onCreate(Database db, int version) async {
-    await db.execute('''
+    try {
+      await db.execute('''
       CREATE TABLE  $_tblAllowance (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tanggal TEXT,
-        jumlah INTEGER,
-        categories TEXT
-      );
-    ''');
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          tanggal TEXT,
+          jumlah INTEGER,
+          categories TEXT
+        );
+      ''');
+    } on Exception catch (e) {
+      print('=== Ada error dalam pembuatan $_tblAllowance ::: ${e.toString()}');
+    }
 
-    await db.execute('''
+    // print('Create database $_tblAllowance');
+
+    try {
+      await db.execute('''
       CREATE TABLE  $_tblExpenditure (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tanggal TEXT,
@@ -57,19 +64,32 @@ class DatabaseHelper {
         description TEXT
       );
     ''');
+    } on Exception catch (e) {
+      print(
+          '=== Ada error dalam pembuatan $_tblExpenditure ::: ${e.toString()}');
+    }
 
-    await db.execute('''
+    // print('Create database $_tblExpenditure');
+
+    try {
+      await db.execute('''
       CREATE TABLE  $_tblIncome (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tanggal TEXT,
-        jumlah INTEGER,
-        description TEXT
-      );
-    ''');
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          tanggal TEXT,
+          jumlah INTEGER,
+          description TEXT
+        );
+      ''');
+    } on Exception catch (e) {
+      print('=== Ada error dalam pembuatan $_tblIncome ::: ${e.toString()}');
+    }
+
+    // print('Create database $_tblIncome');
   }
 
   Future<int> insertExpenditure(ExpenditureTable expenditure) async {
     final db = await database;
+    print('insert expenditure');
     return await db!.insert((_tblExpenditure), expenditure.toJson());
   }
 
@@ -158,21 +178,21 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getExpenditure() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(_tblExpenditure);
-    print(results);
+    print('result :: $results');
     return results;
   }
 
   Future<List<Map<String, dynamic>>> getIncome() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(_tblIncome);
-    print(results);
+    // print(results);
     return results;
   }
 
   Future<List<Map<String, dynamic>>> getAllowance() async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db!.query(_tblAllowance);
-    print(results);
+    // print(results);
     return results;
   }
 }

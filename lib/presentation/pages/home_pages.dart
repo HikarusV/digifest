@@ -1,13 +1,27 @@
+import 'package:digifest/common/state.dart';
 import 'package:digifest/data/global.dart';
-import 'package:digifest/data/model/expenditure_table.dart';
-import 'package:digifest/data/model/income_table.dart';
-import 'package:digifest/presentation/pages/transact_pages.dart';
+import 'package:digifest/presentation/provider/data_provider.dart';
 import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePages extends StatelessWidget {
+class HomePages extends StatefulWidget {
   const HomePages({super.key});
+
+  @override
+  State<HomePages> createState() => _HomePagesState();
+}
+
+class _HomePagesState extends State<HomePages> {
+  @override
+  void initState() {
+    Future.microtask(() => Provider.of<DataProvider>(context, listen: false)
+      ..fetchAllowanceData()
+      ..fetchExpenditureData()
+      ..fetchIncomeData());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +33,15 @@ class HomePages extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 const Text(
                   "Halo!",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,19 +49,13 @@ class HomePages extends StatelessWidget {
                     Text(
                       context.watch<UserProvider>().getName(),
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TransactPages(),
-                            ));
-                      },
-                      child: const Text("Tambah Saldo"),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.person),
                     )
                   ],
                 ),
@@ -50,27 +64,35 @@ class HomePages extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(),
+                    // border: Border.all(),
+                    color: Colors.deepPurple,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   height: 100,
                   alignment: Alignment.center,
-                  child: const Stack(
+                  child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Positioned(
+                      const Positioned(
                         top: 20,
                         left: 20,
-                        child: Text("Saldo Total"),
+                        child: Text(
+                          "Saldo Total",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                       Positioned(
                         right: 20,
                         bottom: 20,
                         child: Text(
-                          "Rp 1.000.000",
-                          style: TextStyle(
+                          rupiah.format(context.watch<DataProvider>().income -
+                              context.watch<DataProvider>().expenditure),
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -84,24 +106,26 @@ class HomePages extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Chip(
-                        label: const Row(
+                        label: Row(
                           children: [
-                            Icon(Icons.arrow_upward),
-                            SizedBox(
+                            const Icon(Icons.arrow_upward),
+                            const SizedBox(
                               width: 10,
                             ),
-                            Text("20.000")
+                            Text(rupiah
+                                .format(context.watch<DataProvider>().income))
                           ],
                         ),
                         backgroundColor: Colors.green[200]),
                     Chip(
-                        label: const Row(
+                        label: Row(
                           children: [
-                            Icon(Icons.arrow_downward),
-                            SizedBox(
+                            const Icon(Icons.arrow_downward),
+                            const SizedBox(
                               width: 10,
                             ),
-                            Text("20.000")
+                            Text(rupiah.format(
+                                context.watch<DataProvider>().expenditure))
                           ],
                         ),
                         backgroundColor: Colors.red[200]),
@@ -118,12 +142,34 @@ class HomePages extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(90),
-                          border: Border.all(),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(1, 1),
+                              color: Colors.black38,
+                              blurRadius: 3,
+                              spreadRadius: 0.1,
+                            ),
+                          ],
                         ),
-                        // alignment: Alignment.centerRight,
-                        child: const Icon(
-                          Icons.add,
-                          size: 30,
+                        child: Material(
+                          borderRadius: BorderRadius.circular(90),
+                          color: Colors.white,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(90),
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(90),
+                              ),
+                              // alignment: Alignment.centerRight,
+                              child: const Icon(
+                                Icons.add,
+                                size: 30,
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       ListView.builder(
@@ -170,57 +216,75 @@ class HomePages extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                ListView.builder(
-                  itemCount: 6,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  itemBuilder: (context, index) => Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: const Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "05/07",
-                            textAlign: TextAlign.start,
-                          ),
+                Consumer<DataProvider>(builder: (context, value, _) {
+                  if (value.expenditureDataState == ResultState.loading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (value.expenditureDataState ==
+                      ResultState.hasData) {
+                    return ListView.builder(
+                      itemCount: value.expenditureTableDataList.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      itemBuilder: (context, index) => Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        Flexible(
-                          flex: 0,
-                          child: SizedBox(
-                            width: 8,
-                          ),
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${value.expenditureTableDataList[index].tanggal!.day}/${value.expenditureTableDataList[index].tanggal!.month}",
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            const Flexible(
+                              flex: 0,
+                              child: SizedBox(
+                                width: 8,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: Text(
+                                "${value.expenditureTableDataList[index].description}",
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                            const Flexible(
+                              flex: 0,
+                              child: SizedBox(
+                                width: 8,
+                              ),
+                            ),
+                            Flexible(
+                              flex: 0,
+                              child: Text(
+                                rupiah.format(value
+                                    .expenditureTableDataList[index].jumlah),
+                                textAlign: TextAlign.end,
+                              ),
+                            )
+                          ],
                         ),
-                        Expanded(
-                          flex: 5,
-                          child: Text(
-                            "Pengeluaran Pokok",
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                        Flexible(
-                          flex: 0,
-                          child: SizedBox(
-                            width: 8,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "500.000",
-                            textAlign: TextAlign.end,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
+                    );
+                  } else if (value.expenditureDataState == ResultState.noData) {
+                    return const Center(
+                      child: Text('Data Kosong'),
+                    );
+                  } else {
+                    return const Center(
+                      child: Text('Ada masalah saat memuat data'),
+                    );
+                  }
+                }),
               ],
             ),
           ),

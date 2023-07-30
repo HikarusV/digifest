@@ -3,6 +3,8 @@ import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../main_pages.dart';
+
 class InitiateNamePages extends StatefulWidget {
   const InitiateNamePages({super.key});
 
@@ -79,7 +81,7 @@ class _InitiateNamePagesState extends State<InitiateNamePages> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const HomePages(),
+                                builder: (context) => const MainPages(),
                               ));
                         },
                       ),
