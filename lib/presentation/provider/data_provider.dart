@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:digifest/common/state.dart';
 import 'package:digifest/data/global.dart';
 import 'package:digifest/data/model/allowance_table.dart';
@@ -6,7 +8,6 @@ import 'package:digifest/data/model/income_table.dart';
 import 'package:flutter/material.dart';
 
 class DataProvider with ChangeNotifier {
-  List<AllowanceTable> allowanceTableDataList = [];
   List<IncomeTable> incomeTableDataList = [];
   List<ExpenditureTable> expenditureTableDataList = [];
 
@@ -18,23 +19,43 @@ class DataProvider with ChangeNotifier {
   ResultState incomeDataState = ResultState.empty;
   ResultState expenditureDataState = ResultState.empty;
 
+  List<String> allowanceCategories = [];
+  List<int> allowanceCategoriesPrice = [];
+  Map<String, List<AllowanceTable>> allowanceTableData = {};
+
   Future fetchAllowanceData() async {
     allowanceDataState = ResultState.loading;
     notifyListeners();
 
     try {
-      databaseHelper.getAllowance().then((value) {
-        List<AllowanceTable> buffer = [];
-        allowance = 0;
-
+      databaseHelper.getAllowanceCategoriesData().then((value) async {
+        allowanceCategories.clear();
         for (Map<String, dynamic> i in value) {
-          buffer.add(AllowanceTable.fromMap(i));
-          allowance += buffer[buffer.length - 1].jumlah!;
+          allowanceCategories.add(i['categories']);
         }
-        buffer.sort((a, b) => a.tanggal!.compareTo(b.tanggal!));
-        allowanceTableDataList = List.from(buffer);
-        allowanceDataState =
-            buffer.isNotEmpty ? ResultState.hasData : ResultState.noData;
+
+        allowanceTableData.clear();
+        allowanceCategoriesPrice.clear();
+
+        int index = 0;
+        for (String i in allowanceCategories) {
+          await databaseHelper.getAllowanceByCategories(i).then((value) {
+            List<AllowanceTable> buffer = [];
+            allowance = 0;
+
+            for (Map<String, dynamic> i in value) {
+              buffer.add(AllowanceTable.fromMap(i));
+              allowance += buffer[buffer.length - 1].jumlah!;
+            }
+            buffer.sort((a, b) => a.tanggal!.compareTo(b.tanggal!));
+            allowanceTableData[i] = List.from(buffer);
+            allowanceCategoriesPrice.add(allowance);
+          });
+          index++;
+        }
+        allowanceDataState = allowanceCategories.isNotEmpty
+            ? ResultState.hasData
+            : ResultState.noData;
         notifyListeners();
       });
     } on Exception catch (e) {
@@ -75,7 +96,7 @@ class DataProvider with ChangeNotifier {
 
     try {
       databaseHelper.getIncome().then((value) {
-        print(value);
+        // print(value);
         List<IncomeTable> buffer = [];
         income = 0;
 

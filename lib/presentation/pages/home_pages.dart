@@ -1,5 +1,7 @@
 import 'package:digifest/common/state.dart';
 import 'package:digifest/data/global.dart';
+import 'package:digifest/presentation/pages/allowance_pages.dart';
+import 'package:digifest/presentation/pages/profile_pages.dart';
 import 'package:digifest/presentation/provider/data_provider.dart';
 import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +56,14 @@ class _HomePagesState extends State<HomePages> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePages(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.person),
                     )
                   ],
@@ -156,7 +165,15 @@ class _HomePagesState extends State<HomePages> {
                           color: Colors.white,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(90),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AllowanceTransact(),
+                                ),
+                              );
+                            },
                             child: Container(
                               padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
@@ -172,40 +189,61 @@ class _HomePagesState extends State<HomePages> {
                           ),
                         ),
                       ),
-                      ListView.builder(
-                        itemCount: 3,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        itemBuilder: (context, index) => Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: const Row(
-                            children: [
-                              Expanded(
-                                flex: 5,
-                                child: Text("Pengeluaran Pokok"),
+                      Consumer<DataProvider>(builder: (context, value, _) {
+                        if (value.allowanceDataState == ResultState.loading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (value.allowanceDataState ==
+                            ResultState.hasData) {
+                          return ListView.builder(
+                            itemCount: value.allowanceCategories.length,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            itemBuilder: (context, index) => Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              Flexible(
-                                flex: 0,
-                                child: SizedBox(
-                                  width: 8,
-                                ),
+                              padding: const EdgeInsets.all(12),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child:
+                                        Text(value.allowanceCategories[index]),
+                                  ),
+                                  const Flexible(
+                                    flex: 0,
+                                    child: SizedBox(
+                                      width: 8,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 0,
+                                    child: Text(
+                                      rupiah.format(value
+                                          .allowanceCategoriesPrice[index]),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    "500.000",
-                                    textAlign: TextAlign.end,
-                                  ))
-                            ],
-                          ),
-                        ),
-                      ),
+                            ),
+                          );
+                        } else if (value.allowanceDataState ==
+                            ResultState.noData) {
+                          return const Center(
+                            child: Text('Data Kosong'),
+                          );
+                        } else {
+                          return const Center(
+                            child: Text('Ada masalah saat memuat data'),
+                          );
+                        }
+                      }),
                     ],
                   ),
                 ),

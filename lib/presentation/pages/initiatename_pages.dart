@@ -1,3 +1,4 @@
+import 'package:digifest/data/global.dart';
 import 'package:digifest/presentation/pages/home_pages.dart';
 import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +30,18 @@ class _InitiateNamePagesState extends State<InitiateNamePages> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: 100,
-                  height: 50,
-                  color: Colors.red,
+                  width: 200,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    // color: Colors.redAccent,
+                    image: DecorationImage(
+                      image: AssetImage('assets/names.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(
-                  height: 60,
+                  height: 30,
                 ),
                 Container(
                   // color: Colors.yellow,
@@ -79,10 +86,11 @@ class _InitiateNamePagesState extends State<InitiateNamePages> {
                               .read<UserProvider>()
                               .changeName(nameController.text);
                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainPages(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPages(),
+                            ),
+                          );
                         },
                       ),
               ),

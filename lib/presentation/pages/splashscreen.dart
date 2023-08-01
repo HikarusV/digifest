@@ -6,6 +6,7 @@ class SplashscreenPages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.deepPurple,
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -16,15 +17,22 @@ class SplashscreenPages extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
             const SizedBox(
               height: 60,
             ),
             Container(
-              width: 100,
-              height: 50,
-              color: Colors.blue,
+              width: 200,
+              height: 130,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/logo-digifest.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              // color: Colors.blue,
             ),
             const SizedBox(
               height: 40,
@@ -34,6 +42,7 @@ class SplashscreenPages extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ],

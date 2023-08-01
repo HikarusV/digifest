@@ -1,4 +1,5 @@
 import 'package:digifest/presentation/pages/home_pages.dart';
+import 'package:digifest/presentation/pages/statistik_pages.dart';
 import 'package:digifest/presentation/pages/transact_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
@@ -12,9 +13,9 @@ class MainPages extends StatefulWidget {
 
 class _MainPagesState extends State<MainPages> {
   int currentIndex = 0;
-  final screens = [
+  List<Widget> screens = [
     const HomePages(),
-    const Scaffold(),
+    const StatistikPages(),
   ];
 
   @override
@@ -39,6 +40,11 @@ class _MainPagesState extends State<MainPages> {
           // type: BottomNavigationBarType.fixed,
           onTap: (value) => setState(() {
             currentIndex = value;
+
+            if (value == 0) {
+              screens.removeAt(1);
+              screens.add(const StatistikPages());
+            }
           }),
           items: const [
             BottomNavigationBarItem(

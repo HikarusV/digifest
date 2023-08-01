@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:digifest/data/model/allowance_table.dart';
 import 'package:digifest/data/model/expenditure_table.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,12 +9,12 @@ import '../model/income_table.dart';
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
   DatabaseHelper._instance() {
-    print("instance");
+    // print("instance");
     _databaseHelper = this;
   }
 
   factory DatabaseHelper({Database? database}) {
-    print("in Factory");
+    // print("in Factory");
     _database = database;
     return _databaseHelper ?? DatabaseHelper._instance();
   }
@@ -21,7 +22,7 @@ class DatabaseHelper {
   static Database? _database;
 
   Future<Database?> get database async {
-    print("get Database");
+    // print("get Database");
     _database ??= await _initDb();
     return _database;
   }
@@ -31,12 +32,17 @@ class DatabaseHelper {
   static const String _tblAllowance = 'allowance';
 
   Future<Database> _initDb() async {
-    print("Init DB");
+    // print("Init DB");
     final path = await getDatabasesPath();
     final databasePath = '$path/digifest.db';
 
     var db = await openDatabase(databasePath, version: 1, onCreate: _onCreate);
     return db;
+  }
+
+  Future<void> deleteDatabase() async {
+    final path = await getDatabasesPath();
+    databaseFactory.deleteDatabase('$path/digifest.db');
   }
 
   void _onCreate(Database db, int version) async {
@@ -98,7 +104,7 @@ class DatabaseHelper {
     return await db!.insert((_tblIncome), income.toJson());
   }
 
-  Future<int> insertAllowance(IncomeTable allowance) async {
+  Future<int> insertAllowance(AllowanceTable allowance) async {
     final db = await database;
     return await db!.insert((_tblAllowance), allowance.toJson());
   }
@@ -173,6 +179,23 @@ class DatabaseHelper {
     } else {
       return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getAllowanceCategoriesData() async {
+    final db = await database;
+    final List<Map<String, dynamic>> results =
+        await db!.query(_tblAllowance, distinct: true, columns: ['categories']);
+    // print(results);
+    return results;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllowanceByCategories(
+      String categories) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db!
+        .query(_tblAllowance, where: 'categories = ?', whereArgs: [categories]);
+    // print(results);
+    return results;
   }
 
   Future<List<Map<String, dynamic>>> getExpenditure() async {

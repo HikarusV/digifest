@@ -1,5 +1,6 @@
 import 'package:digifest/common/state.dart';
 import 'package:digifest/data/global.dart';
+import 'package:digifest/presentation/main_pages.dart';
 import 'package:digifest/presentation/pages/home_pages.dart';
 import 'package:digifest/presentation/pages/initiatename_pages.dart';
 import 'package:digifest/presentation/pages/splashscreen.dart';
@@ -9,17 +10,19 @@ import 'package:digifest/presentation/provider/splash_provider.dart';
 import 'package:digifest/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/db/database_helper.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   databaseHelper = DatabaseHelper();
+  dataCache = await SharedPreferences.getInstance();
   databaseHelper.database;
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<UserProvider>(
-        create: (context) => UserProvider(),
+        create: (context) => UserProvider()..init(),
       ),
       ChangeNotifierProvider<StateProvider>(
         create: (context) => StateProvider()..splashscreenController(5),
@@ -47,7 +50,9 @@ class MyApp extends StatelessWidget {
       home: Consumer<StateProvider>(
         builder: (context, value, child) {
           if (value.state == ResultState.hasData) {
-            return const InitiateNamePages();
+            return dataCache.containsKey('user')
+                ? const MainPages()
+                : const InitiateNamePages();
           } else {
             return const SplashscreenPages();
           }
