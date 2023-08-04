@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../main_pages.dart';
+import '../widget/stroke_text.dart';
 
 class InitiateNamePages extends StatefulWidget {
   const InitiateNamePages({super.key});
@@ -25,23 +26,81 @@ class _InitiateNamePagesState extends State<InitiateNamePages> {
         alignment: Alignment.center,
         child: Stack(
           children: [
+            Positioned(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Container(
+                    width: 250,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      // color: Colors.amber,
+                      image: DecorationImage(
+                        image: AssetImage('assets/std-black.png'),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const StrokeText(
+                    text: 'In association with',
+                    size: 14,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          // color: Colors.amber,
+                          image: DecorationImage(
+                            image: AssetImage('assets/twh.png'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        width: 110,
+                        height: 60,
+                        decoration: const BoxDecoration(
+                          // color: Colors.amber,
+                          image: DecorationImage(
+                            image: AssetImage('assets/pkm.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: 200,
-                  height: 100,
+                  width: 250,
+                  height: 250,
                   decoration: const BoxDecoration(
                     // color: Colors.redAccent,
                     image: DecorationImage(
-                      image: AssetImage('assets/names.png'),
+                      image: AssetImage('assets/ilustration.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   // color: Colors.yellow,
