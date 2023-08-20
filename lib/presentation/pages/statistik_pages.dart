@@ -138,7 +138,7 @@ class _StatistikPagesState extends State<StatistikPages> {
                         categoriesLabel.isEmpty &&
                         datasourcePieChart[0].y == 0
                     ? 0
-                    : categoriesLabel.length + 1,
+                    : categoriesLabel.length + 2,
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -158,6 +158,35 @@ class _StatistikPagesState extends State<StatistikPages> {
                       nominal: () {
                         List<IncomeTable> data = List.from(
                             context.read<DataProvider>().incomeTableDataList);
+                        data.removeWhere((element) => !DateTime(
+                                element.tanggal!.year, element.tanggal!.month)
+                            .isAtSameMomentAs(DateTime(now.year, now.month)));
+
+                        int result = 0;
+
+                        for (int i = 0; i < data.length; i++) {
+                          result += data[i].jumlah!;
+                        }
+
+                        return result;
+                      },
+                    );
+                  } else if (index == datasourcePieChart.length - 1) {
+                    return CardStatistikData(
+                      title: 'Pengeluaran',
+                      transactionCount: () {
+                        List<ExpenditureTable> data = List.from(context
+                            .read<DataProvider>()
+                            .expenditureTableDataList);
+                        data.removeWhere((element) => !DateTime(
+                                element.tanggal!.year, element.tanggal!.month)
+                            .isAtSameMomentAs(DateTime(now.year, now.month)));
+                        return data.length;
+                      },
+                      nominal: () {
+                        List<ExpenditureTable> data = List.from(context
+                            .read<DataProvider>()
+                            .expenditureTableDataList);
                         data.removeWhere((element) => !DateTime(
                                 element.tanggal!.year, element.tanggal!.month)
                             .isAtSameMomentAs(DateTime(now.year, now.month)));

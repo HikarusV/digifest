@@ -118,7 +118,7 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> removeAllowance(ExpenditureTable allowance) async {
+  Future<int> removeAllowance(AllowanceTable allowance) async {
     final db = await database;
     return await db!.delete(
       _tblAllowance,
@@ -134,6 +134,26 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [income.id],
     );
+  }
+
+  Future<int> updateIncome(int id, IncomeTable incomeData) async {
+    final db = await database;
+    return await db!.update(_tblIncome, incomeData.toJson(),
+        where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updateExpenditure(
+      int id, ExpenditureTable expenditureData) async {
+    print(id);
+    final db = await database;
+    return await db!.update(_tblExpenditure, expenditureData.toJsonEdited(),
+        where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updateAllowance(int id, AllowanceTable allowanceData) async {
+    final db = await database;
+    return await db!.update(_tblAllowance, allowanceData.toJsonEdited(),
+        where: 'id = ?', whereArgs: [id]);
   }
 
   Future<Map<String, dynamic>?> getExpenditureById(int id) async {

@@ -35,7 +35,7 @@ class CardStatistikData extends StatelessWidget {
           ),
           Flexible(
             child: Text(
-              rupiah.format(nominal()),
+              '${rupiah.format(nominal())}.-',
             ),
           )
         ],

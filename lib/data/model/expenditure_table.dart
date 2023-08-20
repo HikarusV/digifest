@@ -26,6 +26,12 @@ class ExpenditureTable {
         'description': description,
       };
 
+  Map<String, dynamic> toJsonEdited() => {
+        'tanggal': tanggal.toString(),
+        'jumlah': jumlah,
+        'description': description,
+      };
+
   @override
   // TODO: implement props
   List<Object?> get props => [id, tanggal, jumlah, description];

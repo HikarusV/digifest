@@ -64,6 +64,18 @@ class DataProvider with ChangeNotifier {
     }
   }
 
+  int getTotalAllowance() {
+    int total = 0;
+
+    for (List<AllowanceTable> i in allowanceTableData.values.toList()) {
+      for (AllowanceTable j in i) {
+        total += j.jumlah!;
+      }
+    }
+
+    return total;
+  }
+
   Future fetchExpenditureData() async {
     expenditureDataState = ResultState.loading;
     notifyListeners();

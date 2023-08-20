@@ -25,6 +25,12 @@ class AllowanceTable {
         'categories': categories,
       };
 
+  Map<String, dynamic> toJsonEdited() => {
+        'tanggal': tanggal.toString(),
+        'jumlah': jumlah,
+        'categories': categories,
+      };
+
   @override
   // TODO: implement props
   List<Object?> get props => [id, tanggal, jumlah, categories];
