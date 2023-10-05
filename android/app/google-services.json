@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "698230349659",
+    "project_id": "digifest-5fe43",
+    "storage_bucket": "digifest-5fe43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698230349659:android:d441146f869ab895a3847e",
+        "android_client_info": {
+          "package_name": "com.digifest.digifest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT8oMX8kc_P_HhtujA-pAO9QJNj4etK8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

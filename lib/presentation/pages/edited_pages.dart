@@ -166,7 +166,7 @@ class _EditedPagesState extends State<EditedPages> {
                           id: widget.id,
                           tanggal: dataDateTime.dateTime,
                           jumlah: int.tryParse(jumlah.text) ?? 0,
-                          description: widget.desc,
+                          description: categories.text,
                         ),
                       )
                           .then((value) {

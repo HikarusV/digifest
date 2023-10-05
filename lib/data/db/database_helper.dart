@@ -144,10 +144,19 @@ class DatabaseHelper {
 
   Future<int> updateExpenditure(
       int id, ExpenditureTable expenditureData) async {
-    print(id);
+    print("=== Update Expenditure ===");
     final db = await database;
-    return await db!.update(_tblExpenditure, expenditureData.toJsonEdited(),
+    int result = await db!.update(
+        _tblExpenditure, expenditureData.toJsonEdited(),
         where: 'id = ?', whereArgs: [id]);
+    print(expenditureData.toJsonEdited());
+    db.query(
+      _tblExpenditure,
+      where: 'id = ?',
+      whereArgs: [id],
+    ).then((value) => print(value));
+    print("=== Update Expenditure ===");
+    return result;
   }
 
   Future<int> updateAllowance(int id, AllowanceTable allowanceData) async {

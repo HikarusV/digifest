@@ -1,4 +1,4 @@
-package com.digifest.digifest
+package com.digifest.digimovi
 
 import io.flutter.embedding.android.FlutterActivity
 
